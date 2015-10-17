@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Mevcut Müşteriler</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <p:dataTable value="#{musterileriGetir.musteriler}" var="mObject">
+                <p:column>
+                    <f:facet name="header">
+                        İsim
+                    </f:facet>
+                    <p:outputLabel value="#{mObject.ad}"/>
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        Adres
+                    </f:facet>
+                    <p:outputLabel value="#{mObject.adres}"/>
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        Firma
+                    </f:facet>
+                    <p:outputLabel value="#{mObject.firma}"/>
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        Telefon
+                    </f:facet>
+                    <p:outputLabel value="#{mObject.telefon}"/>
+                </p:column>
+                
+                <p:column>
+                    <f:facet name="header">
+                        Satış Yap
+                    </f:facet>
+                    <p:commandButton value="Satış Yap" oncomplete="PF('dPencere').show()" update=":#{p:component('pGrid')}">
+                        <f:setPropertyActionListener value="#{mObject}" target="#{satisIslemi.musteri}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            
+            <p:dialog widgetVar="dPencere" header="Satış Penceresi">
+                <p:panelGrid columns="2" id="pGrid">
+                    <p:outputLabel value="#{satisIslemi.musteri.ad}"/>
+                    <p:outputLabel value="#{satisIslemi.musteri.firma}"/>
+                    
+                    <p:selectOneMenu value="#{satisIslemi.UAd}" >
+                        <f:selectItems value="#{urunleriGetir.urunler}"/>
+                    </p:selectOneMenu>
+                    <p:inputText value="#{satisIslemi.kilo}"/>
+                    
+                    <h:outputText/>
+                    <p:commandButton value="TAMAM" actionListener="#{satisIslemi.satisiYap}" update=":#{p:component('mGrid')}" oncomplete="PF('islemMesaji').show()"/>
+                </p:panelGrid>
+            </p:dialog>
+            
+            <p:dialog widgetVar="islemMesaji" header="İşlem Mesajı">
+                <p:inputTextarea id="mGrid" value="#{satisIslemi.mesaj}"/>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+
